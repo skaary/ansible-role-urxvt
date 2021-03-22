@@ -1,0 +1,8 @@
+---
+- name: execute powerline patched fonts install script
+  command: ./install.sh
+  args:
+    chdir: "{{ powerline_fonts_dir }}"
+
+- name: update font cache
+  command: fc-cache -vf

@@ -1,0 +1,17 @@
+---
+- name: Converge
+  hosts: all
+
+  pre_tasks:
+    - name: Update apt cache.
+      apt: update_cache=true cache_valid_time=600
+
+    - name: ensure git is installed
+      apt:
+        name: git
+        state: present
+
+  tasks:
+    - name: "Include ansible-role-urxvt"
+      include_role:
+        name: "ansible-role-urxvt"
