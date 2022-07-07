@@ -3,31 +3,31 @@
   apt:
     name: "{{ [urxvt_package_name] + urxvt_shared_packages }}"
     state: present
+  become: true
 
-# - name: ensure urxvt extensions directory is present
-#   file:
-#     state: directory
-#     path: "{{ urxvt_extensions_path }}"
-#     mode: 0755
-#     owner: root
-#     group: root
-#   become: yes
+- name: ensure urxvt extensions directory is present
+  file:
+    state: directory
+    path: "{{ urxvt_extensions_path }}"
+    mode: 0755
+    owner: root
+    group: root
+  become: true
 
-# - name: ensure urxvt extensions are downloaded
-#   get_url:
-#     url: "{{ item }}"
-#     dest: "{{ urxvt_extensions_path }}/{{ item | basename }}"
-#     mode: 0755
-#     force: yes
-#     timeout: 30
-#   register: task_result
-#   # until: task_result | succeeded
-#   until: "'failed' not in task_result"
-#   retries: 10
-#   delay: 5
-#   become: yes
-#   with_items:
-#     - "{{ urxvt_extensions }}"
+- name: ensure urxvt extensions are downloaded
+  get_url:
+    url: "{{ item }}"
+    dest: "{{ urxvt_extensions_path }}/{{ item | basename }}"
+    # mode: 0755
+    force: true
+    # timeout: 30
+  # register: task_result
+  # until: "'failed' not in task_result"
+  # retries: 10
+  # delay: 5
+  become: true
+  with_items:
+    - "{{ urxvt_extensions }}"
 
 - name: locate urxvt executable
   command: which urxvt
@@ -39,17 +39,4 @@
     src: "{{ urxvt_bin.stdout }}"
     path: /etc/alternatives/x-terminal-emulator
     state: link
-  become: yes
-
-- name: ensure fontconfig exists
-  apt:
-    name: fontconfig
-    state: present
-
-- name: download powerline patched fonts repo
-  git:
-    repo: "{{ powerline_repo }}"
-    dest: "{{ powerline_fonts_dir }}"
-  notify:
-    - execute powerline patched fonts install script
-    - update font cache
+  become: true
